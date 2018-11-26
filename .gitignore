@@ -2,3 +2,4 @@
 kijibase/kijibase/__pycache__
 kijibase/kijisearch/__pycache__
 kijibase/kijisearch/migrations/__pycache__
+config.py
