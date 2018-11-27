@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'kijibase.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nflparse',
+        'NAME': 'kijidata',
         'USER': 'postgres',
         'PASSWORD': os.environ['POSTGRES_IN'],
         'HOST': '127.0.0.1',
