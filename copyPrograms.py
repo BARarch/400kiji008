@@ -32,22 +32,11 @@ if __name__ == '__main__':
     cursor = conn.cursor()
     programs = psd.get_programs()
 
-
-
-    programsHash =  [{ 'pubDate':record[0], 
-                    'team':feedRow[1], 
-                    'title':record[1], 
-                    'type':feedRow[2], 
-                    'link':record[2], 
-                    'discription':record[3], 
-                    'creator':record[4]
-                    } for record in programs]
-
     pushedElms = 0
-    for elm in reversed(programs):
+    for elm in programs:
         cursor.execute(
-            "INSERT INTO nfl_team_articles (Date, Team, Title, Type, Link, Discription, Creator, id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);",
-            (elm['pubDate'], elm['team'], elm['title'], elm['type'], elm['link'], elm['discription'], elm['creator'], lastId))
+            "INSERT INTO kijisearch_programs %s VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
+            (str(tuple(programFields)),) + (pushedElms,) + tuple(elm))
     
         pushedElms += 1
     conn.commit()

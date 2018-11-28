@@ -33,23 +33,12 @@ if __name__ == '__main__':
     conn = config.connect()
     cursor = conn.cursor()
     camps = psd.get_camps()
-    
-    campsHash =  [{ 'pubDate':record[0], 
-                    'team':feedRow[1], 
-                    'title':record[1], 
-                    'type':feedRow[2], 
-                    'link':record[2], 
-                    'discription':record[3], 
-                    'creator':record[4]
-                    } for record in camps]
-
-
 
     pushedElms = 0
-    for elm in reversed(camps):
+    for elm in camps:
         cursor.execute(
-            "INSERT INTO nfl_team_articles (Date, Team, Title, Type, Link, Discription, Creator, id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);",
-            (elm['pubDate'], elm['team'], elm['title'], elm['type'], elm['link'], elm['discription'], elm['creator'], lastId))
+            "INSERT INTO kijisearch_camps %s VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
+            (str(tuple(campFields)),) + (pushedElms,) + tuple(elm))
     
         pushedElms += 1
     conn.commit()
