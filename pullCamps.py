@@ -41,4 +41,7 @@ if __name__ == '__main__':
 
     # Step 1 Load Camp Information
     camps = get_camps()
-    print(camps)
+
+    for camp in camps:
+        print(camp)
+        print(len(camp))

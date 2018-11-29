@@ -40,7 +40,7 @@ class Camps(models.Model):
 	daily_model = models.CharField(max_length=400)
 	focus_areas = models.TextField()
 	cost = models.CharField(max_length=400)
-	register = models.CharField(max_length=400)
+	#register = models.CharField(max_length=400)
 	camp_image_link = models.CharField(max_length=400)
-	camp_video_link = models.CharField(max_length=400)
+	#camp_video_link = models.CharField(max_length=400)
 

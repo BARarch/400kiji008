@@ -34,10 +34,16 @@ if __name__ == '__main__':
 
     pushedElms = 0
     for elm in programs:
-        cursor.execute(
-            "INSERT INTO kijisearch_programs %s VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
-            (str(tuple(programFields)),) + (pushedElms,) + tuple(elm))
+        if len(elm) == 18:
+            cursor.execute(
+                "INSERT INTO kijisearch_programs (id, {}) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);".format(', '.join(programFields)),
+                (pushedElms,) + tuple(elm))
+        else:
+            print('did not add row {}'.format(pushedElms + 2))
+            print(str(elm))
     
         pushedElms += 1
     conn.commit()
+    print()
+    print("DONE")
     print(str(pushedElms) + " kiji-programs")

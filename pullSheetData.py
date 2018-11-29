@@ -4,6 +4,8 @@ import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
 
+get_credentials = mgs.modelInit()
+
 def get_programs():
     """Google Sheets API Code.
     Pulls data from the kiji programs sheet on the google drives
@@ -62,7 +64,7 @@ def get_camps():
 
 if __name__ == '__main__':
     # Step 0 Initialize Models
-    get_credentials = mgs.modelInit()
+    # get_credentials = mgs.modelInit()
     conn = config.connect()
     cursor = conn.cursor()
 

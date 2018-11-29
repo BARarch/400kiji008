@@ -41,4 +41,8 @@ if __name__ == '__main__':
 
     # Step 1 Load Program Information
     programs = get_programs()
-    print(programs)
+
+    for program in programs:
+        print(program)
+        print(len(program))
+    
