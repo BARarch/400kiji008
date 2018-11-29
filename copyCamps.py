@@ -36,7 +36,7 @@ if __name__ == '__main__':
     for elm in camps:
         if len(elm) == 18:
             cursor.execute(
-                "INSERT INTO kijisearch_camps (id, name, course, address, city, state, zip_code, phone, website, email, grades, ages, overview, time_of_year, schedule, daily_model, focus_areas, cost, camp_image_link) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
+                "INSERT INTO kijisearch_camps (id, {}) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);".format(', '.join(campFields)),
                 (pushedElms,) + tuple(elm))
         else:
             print('did not add row {}'.format(pushedElms + 2))
