@@ -75,3 +75,6 @@ if __name__ == '__main__':
 
     camps = get_camps()
     print(camps)
+
+    cursor.close()
+    conn.close()

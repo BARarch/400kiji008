@@ -27,7 +27,6 @@ programFields = [ 	'name',
 
 if __name__ == '__main__':
     # Step 0 Initialize Models
-    get_credentials = mgs.modelInit()
     conn = config.connect()
     cursor = conn.cursor()
     programs = psd.get_programs()
@@ -47,3 +46,6 @@ if __name__ == '__main__':
     print()
     print("DONE")
     print(str(pushedElms) + " kiji-programs")
+
+    cursor.close()
+    conn.close()

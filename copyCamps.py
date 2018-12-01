@@ -1,6 +1,5 @@
 import subprocess
-import modelGS as mgs
-from pullSheetData import get_camps
+import pullSheetData as psd
 import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
@@ -27,10 +26,9 @@ campFields = [ 	'name',
 
 if __name__ == '__main__':
     # Step 0 Initialize Models
-    get_credentials = mgs.modelInit()
     conn = config.connect()
     cursor = conn.cursor()
-    camps = get_camps()
+    camps = psd.get_camps()
 
     pushedElms = 0
     for elm in camps:
@@ -47,3 +45,6 @@ if __name__ == '__main__':
     print()
     print("DONE")
     print("Pushed" + str(pushedElms) + " kiji-camps")
+
+    cursor.close()
+    conn.close()

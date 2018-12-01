@@ -45,3 +45,6 @@ if __name__ == '__main__':
     for camp in camps:
         print(camp)
         print(len(camp))
+
+    cursor.close()
+    conn.close()
