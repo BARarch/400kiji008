@@ -1,6 +1,6 @@
 import subprocess
-import modelGS as mgs
 import pullSheetData as psd
+import clear as cl
 import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
@@ -31,6 +31,10 @@ if __name__ == '__main__':
     cursor = conn.cursor()
     programs = psd.get_programs()
 
+    # Step 1 Clear current Programs
+    cl.clearPrograms(conn)
+
+    # Step 2 Push New Programs
     pushedElms = 0
     for elm in programs:
         if len(elm) == 18:
@@ -45,7 +49,7 @@ if __name__ == '__main__':
     conn.commit()
     print()
     print("DONE")
-    print(str(pushedElms) + " kiji-programs")
+    print("Pushed " + str(pushedElms) + " kiji-programs")
 
     cursor.close()
     conn.close()

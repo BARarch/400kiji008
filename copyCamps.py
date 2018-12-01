@@ -1,5 +1,6 @@
 import subprocess
 import pullSheetData as psd
+import clear as cl
 import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
@@ -30,6 +31,10 @@ if __name__ == '__main__':
     cursor = conn.cursor()
     camps = psd.get_camps()
 
+    # Step 1 Clear Current Camps
+    cl.clearCamps(conn)
+
+    # Step 2 Push New Camps
     pushedElms = 0
     for elm in camps:
         if len(elm) == 18:
@@ -44,7 +49,7 @@ if __name__ == '__main__':
     conn.commit()
     print()
     print("DONE")
-    print("Pushed" + str(pushedElms) + " kiji-camps")
+    print("Pushed " + str(pushedElms) + " kiji-camps")
 
     cursor.close()
     conn.close()
