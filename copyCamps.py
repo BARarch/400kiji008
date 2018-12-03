@@ -1,9 +1,11 @@
 import subprocess
-import pullSheetData as psd
 import clear as cl
 import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
+
+import sys
+import argparse
 
 campFields = [ 	'name',
                 'course',
@@ -29,12 +31,27 @@ if __name__ == '__main__':
     # Step 0 Initialize Models
     conn = config.connect()
     cursor = conn.cursor()
-    camps = psd.get_camps()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s","--sheet", help="the sheet id to pull data")
+    args = parser.parse_args()
+    
+    # Step 1 Get Camp Data
+    if args.sheet:
+        print ("[copyCamps] Pulling Camps from sheetID {}".format(args.sheet))
+        sys.argv = sys.argv[:1]  ## Clear Command Line Args befor import google API code
+        import pullSheetData as psd
+        defalted = False
+        camps = psd.get_programs(sheetId=args.sheet)
+    else:
+        sys.argv = sys.argv[:1]
+        import pullSheetData as psd
+        defalted = True
+        camps = psd.get_programs()
 
-    # Step 1 Clear Current Camps
+    # Step 2 Clear Current Camps
     cl.clearCamps(conn)
 
-    # Step 2 Push New Camps
+    # Step 3 Push New Camps
     pushedElms = 0
     for elm in camps:
         if len(elm) == 18:
@@ -50,6 +67,9 @@ if __name__ == '__main__':
     print()
     print("DONE")
     print("Pushed " + str(pushedElms) + " kiji-camps")
+
+    if defalted:
+        print("[copyCamps] Camp data was pulled from the default sheet since no link was specified")
 
     cursor.close()
     conn.close()

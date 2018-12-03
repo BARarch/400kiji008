@@ -1,6 +1,7 @@
 import psycopg2
 import config as config
 import sys
+import argparse
 
 def fetch(conn, tableName):
 	cursor = conn.cursor()
@@ -19,6 +20,7 @@ def fetchPrograms(conn):
 
 
 if __name__ == '__main__':
+
 	conn = config.connect()
 	if len(sys.argv) == 1:
 		fetch(conn, 'kijisearch_camps')

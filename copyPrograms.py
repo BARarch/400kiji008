@@ -1,9 +1,12 @@
 import subprocess
-import pullSheetData as psd
+#import pullSheetData as psd
 import clear as cl
 import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
+
+import sys
+import argparse
 
 programFields = [ 	'name',
                     'address',
@@ -29,12 +32,27 @@ if __name__ == '__main__':
     # Step 0 Initialize Models
     conn = config.connect()
     cursor = conn.cursor()
-    programs = psd.get_programs()
-
-    # Step 1 Clear current Programs
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s","--sheet", help="the sheet id to pull data")
+    args = parser.parse_args()
+    
+    # Step 1 Get Program Data
+    if args.sheet:
+        print ("[copyPrograms] Pulling Programs from sheetID {}".format(args.sheet))
+        sys.argv = sys.argv[:1]  ## Clear Command Line Args befor import google API code
+        import pullSheetData as psd
+        defalted = False
+        programs = psd.get_programs(sheetId=args.sheet)
+    else:
+        sys.argv = sys.argv[:1]
+        import pullSheetData as psd
+        defalted = True
+        programs = psd.get_programs()
+        
+    # Step 2 Clear current Programs
     cl.clearPrograms(conn)
 
-    # Step 2 Push New Programs
+    # Step 3 Push New Programs
     pushedElms = 0
     for elm in programs:
         if len(elm) == 18:
@@ -50,6 +68,8 @@ if __name__ == '__main__':
     print()
     print("DONE")
     print("Pushed " + str(pushedElms) + " kiji-programs")
+    if defalted:
+        print("[copyPrograms] Program data was pulled from the default sheet since no link was specified")
 
     cursor.close()
     conn.close()
