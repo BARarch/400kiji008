@@ -41,12 +41,12 @@ if __name__ == '__main__':
         sys.argv = sys.argv[:1]  ## Clear Command Line Args befor import google API code
         import pullSheetData as psd
         defalted = False
-        camps = psd.get_programs(sheetId=args.sheet)
+        camps = psd.get_camps(sheetId=args.sheet)
     else:
         sys.argv = sys.argv[:1]
         import pullSheetData as psd
         defalted = True
-        camps = psd.get_programs()
+        camps = psd.get_camps()
 
     # Step 2 Clear Current Camps
     cl.clearCamps(conn)
