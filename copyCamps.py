@@ -4,6 +4,9 @@ import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
 
+import pandas as pd
+import numpy as np
+
 import sys
 import argparse
 
@@ -51,9 +54,13 @@ if __name__ == '__main__':
     # Step 2 Clear Current Camps
     cl.clearCamps(conn)
 
-    # Step 3 Push New Camps
+    # Step 3 Clean data with DataFrame
+    df = pd.DataFrame.from_records(camps, columns=campFields).replace(np.nan, '', regex=True)
+    print(df)
+
+    # Step 4 Push New Camps
     pushedElms = 0
-    for elm in camps:
+    for elm in df.values.tolist():
         if len(elm) == 18:
             cursor.execute(
                 "INSERT INTO kijisearch_camps (id, {}) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);".format(', '.join(campFields)),

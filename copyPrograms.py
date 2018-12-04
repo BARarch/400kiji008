@@ -1,9 +1,11 @@
 import subprocess
-#import pullSheetData as psd
 import clear as cl
 import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
+
+import pandas as pd
+import numpy as np
 
 import sys
 import argparse
@@ -52,9 +54,13 @@ if __name__ == '__main__':
     # Step 2 Clear current Programs
     cl.clearPrograms(conn)
 
-    # Step 3 Push New Programs
+    # Step 3 Clean data with DataFrame
+    df = pd.DataFrame.from_records(programs, columns=programFields).replace(np.nan, '', regex=True)
+    print(df)
+    
+    # Step 4 Push New Programs
     pushedElms = 0
-    for elm in programs:
+    for elm in df.values.tolist():
         if len(elm) == 18:
             cursor.execute(
                 "INSERT INTO kijisearch_programs (id, {}) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);".format(', '.join(programFields)),
