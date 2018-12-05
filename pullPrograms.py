@@ -4,6 +4,9 @@ import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
 
+import pandas as pd
+import numpy as np
+
 def get_programs():
     """Google Sheets API Code.
     Pulls data from the kiji programs sheet on the google drives
@@ -38,11 +41,33 @@ if __name__ == '__main__':
     conn = config.connect()
     cursor = conn.cursor()
 
-
     # Step 1 Load Program Information
     programs = get_programs()
 
-    for program in programs:
-        print(program)
-        print(len(program))
+    programFields = [ 	'name',
+                    'address',
+                    'city',
+                    'state',
+                    'zip_code',
+                    'phone',
+                    'website',
+                    'email',
+                    'grades',
+                    'ages',
+                    'overview',
+                    'daily_model',
+                    'time_of_year',
+                    'focus_areas',
+                    'cost',
+                    'eligibility',
+                    'other_locations_of_operation',
+                    'profile_pic_link'
+    ]
+
+    # Step 2 Clean data with DataFrame
+    df = pd.DataFrame.from_records(programs, columns=programFields).replace(np.nan, '', regex=True)
+    print(df)
+
+    cursor.close()
+    conn.close()
     

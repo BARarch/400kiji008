@@ -4,6 +4,9 @@ import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
 
+import pandas as pd
+import numpy as np
+
 def get_camps():
     """Google Sheets API Code.
     Pulls data from the kiji camps sheet on the google drives
@@ -42,9 +45,29 @@ if __name__ == '__main__':
     # Step 1 Load Camp Information
     camps = get_camps()
 
-    for camp in camps:
-        print(camp)
-        print(len(camp))
+    campFields = [ 	'name',
+                'course',
+                'address',
+                'city',
+                'state',
+                'zip_code',
+                'phone',
+                'website',
+                'email',
+                'grades',
+                'ages',
+                'overview',
+                'time_of_year',
+                'schedule',
+                'daily_model',
+                'focus_areas',
+                'cost',
+                'camp_image_link'
+    ]
+
+    # Step 2 Clean data with DataFrame
+    df = pd.DataFrame.from_records(camps, columns=campFields).replace(np.nan, '', regex=True)
+    print(df)
 
     cursor.close()
     conn.close()

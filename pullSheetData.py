@@ -4,8 +4,51 @@ import psycopg2
 import config as config
 from googleapiclient.errors import HttpError
 
+import pandas as pd
+import numpy as np
+
 get_credentials = mgs.modelInit()
 defaultSheetId = '1Szsa0yzQJBoeOhi-L0xKqEZ1AqKw8aFygO6MJFuUo1g'
+
+programFields = [ 	'name',
+                    'address',
+                    'city',
+                    'state',
+                    'zip_code',
+                    'phone',
+                    'website',
+                    'email',
+                    'grades',
+                    'ages',
+                    'overview',
+                    'daily_model',
+                    'time_of_year',
+                    'focus_areas',
+                    'cost',
+                    'eligibility',
+                    'other_locations_of_operation',
+                    'profile_pic_link'
+]
+
+campFields = [ 	'name',
+                'course',
+                'address',
+                'city',
+                'state',
+                'zip_code',
+                'phone',
+                'website',
+                'email',
+                'grades',
+                'ages',
+                'overview',
+                'time_of_year',
+                'schedule',
+                'daily_model',
+                'focus_areas',
+                'cost',
+                'camp_image_link'
+]
 
 def get_programs(sheetId=defaultSheetId):
     """Google Sheets API Code.
@@ -78,10 +121,15 @@ if __name__ == '__main__':
 
     # Step 1 Load Program and Camp Information
     programs = get_programs()
-    print(programs)
-
     camps = get_camps()
-    print(camps)
+
+    # Step 2 Clean data with DataFrame
+    df = pd.DataFrame.from_records(programs, columns=programFields).replace(np.nan, '', regex=True)
+    print(df)
+    print()
+    df = pd.DataFrame.from_records(camps, columns=campFields).replace(np.nan, '', regex=True)
+    print(df)
+
 
     cursor.close()
     conn.close()
